@@ -1,47 +1,94 @@
 import React, { useState } from "react";
-import "./App.css";
-
-import { makeStyles } from '@material-ui/core/styles';
-import {AppBar, Toolbar, Button} from '@material-ui/core/';
-
+import { Route } from "react-router-dom";
 
 // Components
 import Sidenav from "./components/Sidenav";
+import Content from "./components/Content";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    width:'80%',
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-  },
-}));
-
+// Styles
+import useStyles from "./styles";
 
 function App() {
+  // State
+  const [users, setUsers] = useState([
+    {
+    id: 1,
+    name: 'Ryantha',
+    role: 0,
+    },
+    {
+      id: 2,
+      name: 'Ipran',
+      role: 1,
+    }
+]);
+
+  const [menus, setMenus] = useState([
+    {
+      id : 1,
+      text: 'Kartu',
+      link: '/kartu',
+      children: [
+        {
+          id: 4,
+          text: 'Anak Kartu',
+          link: '/anak-kartu',
+        }, 
+        {
+          id: 5,
+          text: 'Anak Kartu2',
+          link: '/anak-kartu2'
+        }
+      ],
+    },
+    {
+      id : 2,
+      text: 'Perso',
+      link: '/perso',
+      children: [
+        {
+          id: 6,
+          text: 'Anak Perso',
+          link: '/anak-perso'
+        }, 
+        {
+          id: 7,
+          text: 'Anak Perso2',
+          link: '/anak-perso2'
+        }
+      ],
+    },
+    {
+      id : 3,
+      text: 'Previledge',
+      link: '/previledge',
+      children: [],
+    },
+    {
+      id : 8,
+      text: 'User',
+      link: '/user',
+      children: [],
+    }
+  ])
+
+  const addMenusHandler = (menu) => {
+    setMenus([...menus, menu]);
+  }
+  
+  const addUsersHandler = (user) => {
+    setUsers([...users, user]);
+  }
+
+  // Styles
   const classes = useStyles();
 
-  // Global State
-  const [globalState, setGlobalState] = useState({
-    user : {},
-    menus : [{
-     text: 'Kartu', 
-    }, {
-      text: 'Perso',
-    }]
-  });
   return (
     <div className="App">
-      <AppBar position="fixed" className={classes.root}>
-        <Toolbar>
-          <Button color="inherit">Login</Button>
-        </Toolbar>
-      </AppBar>
-      <Sidenav menus = {globalState.menus}/>
+      <div className={classes.root}>
+        <Sidenav menus={menus} addMenu={addMenusHandler}/>
+        <Route path='/' component={() => <Content menus={menus} user={users} addUser={addUsersHandler}/>} />
+      </div>
     </div>
   )
 }
