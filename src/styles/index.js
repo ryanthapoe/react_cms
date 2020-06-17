@@ -12,14 +12,12 @@ const useStyles = makeStyles((theme) => ({
   },
 
   sideNavList: {
+    width: '20%',
     maxWidth: '20%',
-    backgroundColor: theme.palette.background.paper,
     overflowY: 'scroll',
     marginBottom: '0.5rem',
   },
-  sideNavSubHeader: {
-    display:'flex'
-  },
+
   subNav: {
     width: '80%',
     maxHeight: '17vh'
@@ -32,7 +30,8 @@ const useStyles = makeStyles((theme) => ({
 
   table: {
     marginTop: '0.5rem'
-  }
+  },
+
 }));
 
 export default useStyles;

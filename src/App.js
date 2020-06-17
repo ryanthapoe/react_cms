@@ -26,48 +26,31 @@ function App() {
   const [menus, setMenus] = useState([
     {
       id : 1,
-      text: 'Kartu',
-      link: '/kartu',
+      text: 'User',
+      slug: '/user',
+      parent: 0,
       children: [
         {
-          id: 4,
-          text: 'Anak Kartu',
-          link: '/anak-kartu',
-        }, 
+          id : 3,
+          text: 'Delete',
+          slug: '/del',
+          parent: 0,
+          children: [],
+        },
         {
-          id: 5,
-          text: 'Anak Kartu2',
-          link: '/anak-kartu2'
+          id : 4,
+          text: 'Add',
+          slug: '/add',
+          parent: 0,
+          children: [],
         }
       ],
     },
     {
       id : 2,
-      text: 'Perso',
-      link: '/perso',
-      children: [
-        {
-          id: 6,
-          text: 'Anak Perso',
-          link: '/anak-perso'
-        }, 
-        {
-          id: 7,
-          text: 'Anak Perso2',
-          link: '/anak-perso2'
-        }
-      ],
-    },
-    {
-      id : 3,
-      text: 'Previledge',
-      link: '/previledge',
-      children: [],
-    },
-    {
-      id : 8,
-      text: 'User',
-      link: '/user',
+      text: 'Menu',
+      slug: '/menu',
+      parent: 0,
       children: [],
     }
   ])
@@ -99,7 +82,7 @@ function App() {
   return (
     <div className="App">
       <div className={classes.root}>
-        <Sidenav menus={menus} addMenu={addMenusHandler}/>
+        <Sidenav menus={menus}/>
         <Route path='/' component={() => <Content menus={menus} user={users} addUser={addUsersHandler} editUser={editUserHandler} deleteUser={deleteUserHandler}/>} />
       </div>
     </div>
