@@ -20,8 +20,8 @@ npm run start
 
 [*] CRUD Menu
 
-[] CRUD User
+[*] CRUD User
 
-[] Creating component for each CRUD
+[*] Creating component for each CRUD
 
-[] Using props to pass data
+[*] Using props to pass data

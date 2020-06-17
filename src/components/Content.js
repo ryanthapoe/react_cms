@@ -42,7 +42,7 @@ const Content = (props) => {
             <Route exact path="/perso" component={Perso}/>
             <Route exact path="/kartu" component={Kartu}/>
             <Route exact path="/previledge" component={Previledge}/>
-            <Route exact path="/user" component={() => <User users={props.user} addUser={props.addUser}/>}/>
+            <Route exact path="/user" component={() => <User users={props.user} addUser={props.addUser} editUser={props.editUser} deleteUser={props.deleteUser}/>}/>
             <Route component={NotFound} />
           </Switch>
       </section>

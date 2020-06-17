@@ -80,6 +80,19 @@ function App() {
     setUsers([...users, user]);
   }
 
+  const editUserHandler = (editedUser) => {
+    const newUser = users.filter((user) => {
+      return user.id !== editedUser.id
+    })
+    setUsers([...newUser, editedUser]);
+  }
+
+  const deleteUserHandler = (id) => {
+    setUsers(users.filter((user) => {
+      return user.id !== id
+    }))
+  }
+
   // Styles
   const classes = useStyles();
 
@@ -87,7 +100,7 @@ function App() {
     <div className="App">
       <div className={classes.root}>
         <Sidenav menus={menus} addMenu={addMenusHandler}/>
-        <Route path='/' component={() => <Content menus={menus} user={users} addUser={addUsersHandler}/>} />
+        <Route path='/' component={() => <Content menus={menus} user={users} addUser={addUsersHandler} editUser={editUserHandler} deleteUser={deleteUserHandler}/>} />
       </div>
     </div>
   )
