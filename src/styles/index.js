@@ -32,6 +32,10 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '0.5rem'
   },
 
+  nested: {
+    paddingLeft: '4px',
+  },
+
 }));
 
 export default useStyles;
