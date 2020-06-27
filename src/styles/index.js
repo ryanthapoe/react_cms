@@ -17,15 +17,11 @@ const useStyles = makeStyles((theme) => ({
     overflowY: 'scroll',
     marginBottom: '0.5rem',
   },
-
-  subNav: {
-    width: '80%',
-    maxHeight: '17vh'
-  },
   
   content: {
     marginTop: '5rem',
-    marginLeft: '0.5rem'
+    marginLeft: '0.5rem',
+    width: '78vw'
   },
 
   table: {
@@ -35,6 +31,18 @@ const useStyles = makeStyles((theme) => ({
   nested: {
     paddingLeft: '4px',
   },
+
+  linkChild: {
+    paddingLeft : '1rem'
+  },
+
+  loginForm: {
+    margin: 0,
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%,-50%)'
+  }
 
 }));
 

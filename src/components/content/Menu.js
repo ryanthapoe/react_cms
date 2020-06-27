@@ -1,87 +1,78 @@
-import React, {useState} from 'react';
-import { FormControl, TextField, IconButton, InputAdornment, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, InputLabel, Select, MenuItem } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
-import CheckIcon from '@material-ui/icons/Check';
-
-import useStyles from '../../styles';
-
+import React from 'react';
+import MaterialTable from 'material-table';
 
 const Menu = (props) => {
-  const classes = useStyles();
-  const {menus} = props;
+  const {menus, addMenu, editMenu, deleteMenu} = props;
 
-  const [formState, setFormState] = useState('add');
   
-  const childrenHandler = (children) => {
-    const child = children.map((ch) => {
-      return ch.text;
+  const getParentName = (child) => {
+    const parent = menus.filter((menu) => {
+      return child.parent === menu.id
     })
-
-    return child.toString();
+    return `Child of ${parent[0].text}`;
   }
 
+  const getParent = () => {
+    let parent = {
+      0: `Root`
+    };
+    menus.map((p, i) =>{
+      const id = p.id
+      parent[id] = `Child of ${p.text}`
+    })
+    return parent;
+  }
+
+  const columns =  [
+    { title: 'Menu Name', field: 'text' },
+    { 
+      title: 'Slug', 
+      field: 'slug',
+      render: rowData => rowData.slug.substring(1)
+    },
+    { 
+      title: 'Level', 
+      field: 'parent', 
+      render: rowData => rowData.parent === 0 ? 'Root' : getParentName(rowData),
+      lookup: getParent()
+    },
+  ]
+  
   return (
-    <div>
-      <FormControl>
-      <TextField name="user" id="standard-basic" label="Tambah Menu"   InputProps={{
-              endAdornment: 
-              (<InputAdornment position="end">
-                <IconButton aria-label="add" size='small'>
-                  <AddIcon fontSize="default"/>
-                </IconButton>
-              </InputAdornment>)
-            }}/>
-      </FormControl>
-      <TableContainer component={Paper} className={classes.table}>
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell align="center">Nama Menu</TableCell>
-              <TableCell align="center">Slug</TableCell>
-              <TableCell align="center">Level</TableCell>
-              <TableCell align="center">Children</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {
-              menus.map((menu) => {
-                if(formState === `edit-${menu.id}`){
-                  return null;
-                } else {
-                  return (
-                    <TableRow key={menu.id}>
-                      <TableCell align="center">
-                        {menu.text}
-                      </TableCell>
-                      <TableCell align="center">
-                        {menu.slug}
-                      </TableCell>
-                      <TableCell align="center">
-                        {menu.parent === 0 ? 'parent' : 'children'}
-                      </TableCell>
-                      <TableCell align="center">
-                        {
-                          menu.children.length > 0 ?
-                            (
-                              childrenHandler(menu.children)
-                            ) 
-                            :
-                            (
-                              null
-                            )
-                        }
-                      </TableCell>
-                    </TableRow>
-                  )
-                }
-              })
-            }
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </div>
+    <MaterialTable
+      title="Menu"
+      columns={columns}
+      data={menus}
+      parentChildData={(row, rows) => rows.find(a => a.id === row.parent)}
+      editable={{
+        onRowAdd: (newData) =>
+          new Promise((resolve) => {
+            setTimeout(() => {
+              resolve();
+              newData.id = menus[menus.length-1].id > 0 ?  menus[menus.length-1].id + 1 : 0
+              newData.parent = parseInt(newData.parent);
+              newData.slug = `/${newData.slug}`
+              addMenu(newData);
+            }, 600);
+          }),
+        onRowUpdate: (newData) =>
+          new Promise((resolve) => {
+            setTimeout(() => {
+              resolve();
+              newData.parent = parseInt(newData.parent);
+              newData.slug === ''? newData.slug = '/' : newData.slug = newData.slug
+              editMenu(newData)
+            }, 600);
+          }),
+        onRowDelete: (oldData) =>
+          new Promise((resolve) => {
+            setTimeout(() => {
+              resolve();
+              deleteMenu(oldData)
+            }, 600);
+          })
+      }}
+    />
   )
 }
 

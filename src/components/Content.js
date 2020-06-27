@@ -14,11 +14,21 @@ const Content = (props) => {
   const classes = useStyles();
   return (
     <div>
-      <TopNav menus={props.menus}/>
+      <TopNav menus={props.menus} logout={props.logout}/>
       <section className={classes.content}>
         <Switch>
             <Route exact path="/user" component={() => <User users={props.user} addUser={props.addUser} editUser={props.editUser} deleteUser={props.deleteUser}/>}/>
-            <Route exact path="/menu" component={() => <Menu menus={props.menus}/>} />
+            <Route 
+              exact path="/menu" 
+              component={
+                  () => <Menu 
+                          menus={props.menus} 
+                          addMenu={props.addMenu}
+                          editMenu={props.editMenu}
+                          deleteMenu={props.deleteMenu}
+                        />
+                  } 
+              />
             <Route exact path="/">
               <Redirect to="/dashboard" />
             </Route>

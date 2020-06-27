@@ -1,5 +1,22 @@
 import React, {useState} from 'react';
-import { FormControl, TextField, IconButton, InputAdornment, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, InputLabel, Select, MenuItem } from '@material-ui/core';
+
+import { 
+  FormControl, 
+  TextField, 
+  IconButton, 
+  InputAdornment, 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableContainer, 
+  TableHead, 
+  TableRow, 
+  Paper, 
+  InputLabel, 
+  Select, 
+  MenuItem 
+} from '@material-ui/core';
+
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -93,7 +110,7 @@ const User = (props) => {
           </TableHead>
           <TableBody>
           {users.map((user) => {
-            if(formState == `edit-${user.id}`){
+            if(formState === `edit-${user.id}`){
               return (
                 <TableRow key={user.id}>
                   <TableCell align="left">

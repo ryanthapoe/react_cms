@@ -1,12 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { List, ListItem, ListItemText, ListItemIcon, Collapse } from '@material-ui/core/';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
-import SendIcon from '@material-ui/icons/Send';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import StarBorder from '@material-ui/icons/StarBorder';
+import TreeView from '@material-ui/lab/TreeView';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import TreeItem from '@material-ui/lab/TreeItem';
 
 import useStyles from '../styles';
 
@@ -14,59 +11,56 @@ import useStyles from '../styles';
 function Sidenav(props) {
   const classes = useStyles();
 
-  const [open, setOpen] = React.useState(false);
+  const {menus} = props;
 
-  const handleClick = () => {
-    setOpen(!open);
-  };
-
-  const setChildMenu = (menu) => {
-    // JIKA MENU TIDAK MEMPUNYAI ANAK
-    if(!menu.children.length){
-      return (
-        <Link to={menu.slug} key={menu.id}>
-          <ListItem button>
-              <ListItemText primary={menu.text} />
-          </ListItem>
-        </Link>
-      )
-    // JIKA MENU PUNYA ANAK
-    } else {
-      return (
-        <>
-          <ListItem button onClick={handleClick} key={menu.id} >
-            <ListItemIcon>
-            </ListItemIcon>
-            <ListItemText primary={menu.text} />
-            {open ? <ExpandLess /> : <ExpandMore />}
-          </ListItem>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              {menu.children.map((m) => {
-                return setChildMenu(m);
-              })}
-            </List>
-          </Collapse>
-        </>
-      )
-    }
+  const getMenuChild = (menu) => {
+    const newMenu = menu;
+    const children = menus.filter(function(child) {
+      if(menu.id === child.parent){
+        const newChild = getMenuChild(child);
+        return newChild;
+      }
+    })
+    newMenu.children = children;
+    return newMenu;
   }
 
-  const menuLen = props.menus.length;
+  const newMenu = menus.filter((menu) => {
+    if(menu.parent === 0){
+      return getMenuChild(menu)
+    }
+  })
 
-  
+  const setTree = (menu) => {
+    if(menu.children !== undefined && menu.children.length > 0){
+      return (
+        <TreeItem nodeId={menu.id.toString()} label={menu.text} key={menu.id}>
+          {
+            menu.children.map((child) => {
+              return setTree(child);
+            })
+          }
+        </TreeItem>
+      )
+    } else {
+      return (
+        <Link to={menu.slug} key={menu.id}><TreeItem nodeId={menu.id.toString()} label={menu.text}/></Link>
+      )
+    }
+  }  
 
-  return (
-      <List
-        component="nav"
-        className={classes.sideNavList}
-      >
-        {
-          props.menus.map((menu, i) => {
-            return setChildMenu(menu);
-          })
-        }
-      </List>
+ return (
+    <TreeView
+    className={classes.sideNavList}
+    defaultCollapseIcon={<ExpandMoreIcon />}
+    defaultExpandIcon={<ChevronRightIcon />}
+  >
+      {
+        newMenu.map((menu) => {
+          return setTree(menu);
+        })
+      }
+    </TreeView>
   );
 }
 
